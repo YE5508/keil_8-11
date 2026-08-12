@@ -2,6 +2,7 @@
 "keil_8-11\startup_stm32f405xx.o"
 "keil_8-11\main.o"
 "keil_8-11\gpio.o"
+"keil_8-11\dma.o"
 "keil_8-11\tim.o"
 "keil_8-11\usart.o"
 "keil_8-11\stm32f4xx_it.o"

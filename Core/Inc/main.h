@@ -68,7 +68,7 @@ void Error_Handler(void);
 #define KEY_EXTI_IRQn EXTI15_10_IRQn
 
 /* USER CODE BEGIN Private defines */
-
+extern uint8_t volatile dma_state;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

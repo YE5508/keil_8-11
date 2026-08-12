@@ -22,21 +22,29 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-
+#include "string.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "TIM_IRQ_Handler.h"
 #include "switch_sm.h"
 #include "UART_IRQ_Handler.h"
+#include "math.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+#define CH_COUNT 1
+typedef struct Frame
+{
+    float fdata[CH_COUNT];
+    uint8_t tail[4];
+}Frame;
 
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
 
 /* USER CODE END PD */
 
@@ -49,6 +57,10 @@
 
 /* USER CODE BEGIN PV */
 uint8_t switch_state =0 ;
+Frame frame={0,{0x00, 0x00, 0x80, 0x7F}};
+double t = 0;
+uint8_t volatile dma_state = 0;
+uint32_t last_time = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -64,13 +76,12 @@ void SystemClock_Config(void);
 
 /**
   * @brief  The application entry point.
-  * @retval int
+z  * @retval int
   */
 int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -112,7 +123,21 @@ int main(void)
     {
       Beep_Alarm(beep_times);
       beep_times = 0;
+    }//蜂鸣器按上位机发出的满足条件的0x01的数目发声
+    if(HAL_GetTick()-last_time > 20)
+    {
+      last_time = HAL_GetTick();
+      frame.fdata[0]= sin(t);
+      t+=0.02;
+      if(dma_state==0)
+      {
+        dma_state = HAL_UART_Transmit_DMA(&huart1,(uint8_t*)&frame,sizeof(frame));
+      }
     }
+
+    
+
+
     /*if(tx_flag == 1)
     {
       HAL_UART_Transmit(&huart1,tx_buffer,BUFFER_LEN,200);

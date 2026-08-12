@@ -1,4 +1,4 @@
-keil_8-11/buzzer.o: ..\User\Src\buzzer.c ..\User\Inc\buzzer.h \
+keil_8-11/buzzer.o: ..\HDL\Src\buzzer.c ..\HDL\Inc\buzzer.h \
   ..\Core\Inc\main.h ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \
@@ -27,4 +27,7 @@ keil_8-11/buzzer.o: ..\User\Src\buzzer.c ..\User\Inc\buzzer.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
-  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
+  ..\User\Inc\timer.h E:\app\Keil\ARM\ARMCLANG\Bin\..\include\stdbool.h \
+  ..\IRQ\Inc\TIM_IRQ_Handler.h ..\Core\Inc\tim.h

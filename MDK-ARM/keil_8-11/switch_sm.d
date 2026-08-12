@@ -1,5 +1,5 @@
 keil_8-11/switch_sm.o: ..\User\Src\switch_sm.c ..\User\Inc\switch_sm.h \
-  ..\User\Inc\led.h ..\Core\Inc\main.h \
+  ..\HDL\Inc\led.h ..\Core\Inc\main.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \
@@ -29,6 +29,7 @@ keil_8-11/switch_sm.o: ..\User\Src\switch_sm.c ..\User\Inc\switch_sm.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
-  ..\User\Inc\buzzer.h ..\User\Inc\timer.h \
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
+  ..\HDL\Inc\buzzer.h ..\User\Inc\timer.h \
   E:\app\Keil\ARM\ARMCLANG\Bin\..\include\stdbool.h \
-  ..\User\Inc\TIM_IRQ_Handler.h ..\Core\Inc\tim.h
+  ..\IRQ\Inc\TIM_IRQ_Handler.h ..\Core\Inc\tim.h

@@ -18,13 +18,16 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "TIM_IRQ_Handler.h"
 #include "switch_sm.h"
+#include "UART_IRQ_Handler.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -88,12 +91,14 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_TIM2_Init();
   MX_TIM3_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_2);
-
+  UART_Start_Receive();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -103,7 +108,16 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    state_run(switch_state);
+    if(beep_times!=0)
+    {
+      Beep_Alarm(beep_times);
+      beep_times = 0;
+    }
+    /*if(tx_flag == 1)
+    {
+      HAL_UART_Transmit(&huart1,tx_buffer,BUFFER_LEN,200);
+      tx_flag =0;
+    }*/
   }
   /* USER CODE END 3 */
 }
@@ -156,33 +170,7 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  static uint32_t last_time=0;
-  switch(GPIO_Pin)
-  {
-    case GPIO_PIN_11:
-      switch(HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_11))
-      {
-        case 1:
-          last_time = HAL_GetTick();
-          switch_state = SW_STATE;
-          break;
-        case 0:
-          if(HAL_GetTick()-last_time<1000)
-          {
-            switch_state = FLOW_STATE;
-            
-          }
-          else
-          {
-          switch_state = BREATH_STATE;            
-          }
-
-          break;
-
-      }
-      
-      break;
-  }
+  GPIO_EXTI_Callback(GPIO_Pin,&switch_state);
 
 }
 /* USER CODE END 4 */

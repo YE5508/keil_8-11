@@ -28,6 +28,10 @@ keil_8-11/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
-  ..\Core\Inc\tim.h ..\Core\Inc\gpio.h ..\User\Inc\TIM_IRQ_Handler.h \
-  ..\User\Inc\switch_sm.h ..\User\Inc\led.h ..\User\Inc\buzzer.h \
-  ..\User\Inc\timer.h E:\app\Keil\ARM\ARMCLANG\Bin\..\include\stdbool.h
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
+  ..\Core\Inc\tim.h ..\Core\Inc\usart.h ..\Core\Inc\gpio.h \
+  ..\IRQ\Inc\TIM_IRQ_Handler.h ..\User\Inc\switch_sm.h ..\HDL\Inc\led.h \
+  ..\HDL\Inc\buzzer.h ..\User\Inc\timer.h \
+  E:\app\Keil\ARM\ARMCLANG\Bin\..\include\stdbool.h \
+  ..\IRQ\Inc\UART_IRQ_Handler.h \
+  E:\app\Keil\ARM\ARMCLANG\Bin\..\include\string.h

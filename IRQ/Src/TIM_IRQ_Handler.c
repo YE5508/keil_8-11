@@ -2,7 +2,7 @@
 #include "led.h"
 
 volatile uint8_t tim2out_flag = 1;
-
+volatile uint16_t buzzer_time = 0;
 
 void TIM2_start(void)
 {
@@ -13,10 +13,11 @@ void TIM2_start(void)
 
 void TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-    if (htim->Instance == TIM2)//TIM2用于非阻塞式流水灯
+    if (htim->Instance == TIM2)//TIM2用于非阻塞式蜂鸣器
     {
         HAL_TIM_Base_Stop_IT(htim);
         // 计时结束后的处理
-        tim2out_flag = 1;
+        buzzer_off();
+
     }
 }

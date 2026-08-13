@@ -30,6 +30,7 @@
 #include "switch_sm.h"
 #include "UART_IRQ_Handler.h"
 #include "math.h"
+#include "EXT_IRQ_Handler.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -64,7 +65,7 @@ double t = 0;
 uint8_t volatile dma_state = 0;
 uint32_t last_time = 0;
 
-CAN_TxHeaderTypeDef txHeader_Buzzer;
+CAN_TxHeaderTypeDef txHeader_Buzzer={0};
 
 uint32_t txMailbox;
 uint8_t Buzzer_Data[8] = {0};
@@ -134,13 +135,12 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
   /*蜂鸣器响完后发送的数据*/
-  txHeader_Buzzer.IDE = CAN_ID_EXT;
-  txHeader_Buzzer.ExtId = 0x02010101;       // 29位扩展ID
-  txHeader_Buzzer.RTR = CAN_RTR_DATA;
-  txHeader_Buzzer.DLC = 2;
-  txHeader_Buzzer.TransmitGlobalTime = DISABLE;
-  Buzzer_Data[0]='O';
-  Buzzer_Data[1]='K';
+//  txHeader_Buzzer.IDE = CAN_ID_EXT;
+//  txHeader_Buzzer.ExtId = 0x02010101;       // 29位扩展ID
+//  txHeader_Buzzer.RTR = CAN_RTR_DATA;
+//  txHeader_Buzzer.DLC = 2;
+//  Buzzer_Data[0]='O';
+//  Buzzer_Data[1]='K';
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -184,24 +184,32 @@ int main(void)
 #endif
 
 		
-    if(Beep_Trigger!=0)
-    {
-      Beep_Alarm(Beep_Trigger);
-      HAL_CAN_AddTxMessage(&hcan1,&txHeader_Buzzer,Buzzer_Data,&txMailbox);
-      Beep_Trigger = 0;
-    }//蜂鸣器按上位机发出的满足条件的0x01的数目发声
-    if(switch_state==FLOW_STATE)
-    {
-      state_run(FLOW_STATE);
+//    if(Beep_Trigger!=0)
+//    {
+//      Beep_Alarm(Beep_Trigger);
+//      HAL_CAN_AddTxMessage(&hcan1,&txHeader_Buzzer,Buzzer_Data,&txMailbox);
+//      Beep_Trigger = 0;
+//    }//蜂鸣器按上位机发出的满足条件的0x01的数目发声
+//    if(switch_state==FLOW_STATE)
+//    {
+//      state_run(FLOW_STATE);
 
-    }
-    else if (switch_state==IDLE_STATE)
-    {
-      state_run(IDLE_STATE);
-      /* code */
-    }
-		if(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1)!=0)
-          HAL_CAN_AddTxMessage(&hcan1,&txHeader_Buzzer,Buzzer_Data,&txMailbox);
+//    }
+//    else if (switch_state==IDLE_STATE)
+//    {
+//      state_run(IDLE_STATE);
+//      /* code */
+//    }
+		HAL_Delay(100);
+//		if(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1)!=0)
+
+			txHeader_Buzzer.IDE = CAN_ID_EXT;
+			txHeader_Buzzer.ExtId = 0x02010101;       // 29位扩展ID
+			txHeader_Buzzer.RTR = CAN_RTR_DATA;
+			txHeader_Buzzer.DLC = 2;
+			Buzzer_Data[0]='O';
+			Buzzer_Data[1]='K';
+			HAL_CAN_AddTxMessage(&hcan1,&txHeader_Buzzer,Buzzer_Data,&txMailbox);
 
     
 
@@ -263,7 +271,7 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  GPIO_EXTI_Callback(GPIO_Pin,&switch_state);
+//  GPIO_EXTI_Callback(GPIO_Pin,&switch_state);
 
 }
 /* USER CODE END 4 */

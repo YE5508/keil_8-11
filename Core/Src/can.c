@@ -86,7 +86,7 @@ void MX_CAN1_Init(void)
   }
 
     /*---------------过滤器2-----------------*/
-  /*CAN_FilterConfig.FilterActivation = ENABLE;               // 激活过滤器
+  CAN_FilterConfig.FilterActivation = ENABLE;               // 激活过滤器
   CAN_FilterConfig.SlaveStartFilterBank = 14;               // CAN1 CAN2的过滤器分割线，0~13分给CAN1，14-27分给CAN2
   CAN_FilterConfig.FilterBank = 1;                        // 使用第0个筛选器组
   CAN_FilterConfig.FilterScale = CAN_FILTERSCALE_16BIT;     // 位宽
@@ -96,7 +96,7 @@ void MX_CAN1_Init(void)
   CAN_FilterConfig.FilterMaskIdHigh = (0X202 << 5);         // 掩码高位
   CAN_FilterConfig.FilterIdLow = (0x203 << 5);              // 基准低位
   CAN_FilterConfig.FilterMaskIdLow = (0x204 << 5);          // 掩码低位
-  */
+
 
   if (HAL_CAN_Start(&hcan1) != HAL_OK)
     Error_Handler();

@@ -1,5 +1,5 @@
 #ifndef __SWITCH_SM_H
-#define __SWITCH_SW_H
+#define __SWITCH_SM_H
 #define ARRAY_SIZE(arr) (sizeof(arr)/sizeof((arr)[0]))
 #define PWM_ARR 1000
 /*include*/

@@ -36,4 +36,5 @@ keil_8-11/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\User\Inc\timer.h E:\app\Keil\ARM\ARMCLANG\Bin\..\include\stdbool.h \
   ..\IRQ\Inc\UART_IRQ_Handler.h \
   E:\app\Keil\ARM\ARMCLANG\Bin\..\include\string.h \
-  E:\app\Keil\ARM\ARMCLANG\Bin\..\include\math.h
+  E:\app\Keil\ARM\ARMCLANG\Bin\..\include\math.h \
+  ..\IRQ\Inc\EXT_IRQ_Handler.h

@@ -13,7 +13,7 @@ void TIM2_start(void)
 
 void TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-    if (htim->Instance == TIM2)//TIM2用于非阻塞式蜂鸣器
+    if (htim->Instance == TIM2)//TIM2用于流水灯
     {
         HAL_TIM_Base_Stop_IT(htim);
         // 计时结束后的处理

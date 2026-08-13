@@ -2,6 +2,7 @@
 "keil_8-11\startup_stm32f405xx.o"
 "keil_8-11\main.o"
 "keil_8-11\gpio.o"
+"keil_8-11\can.o"
 "keil_8-11\dma.o"
 "keil_8-11\tim.o"
 "keil_8-11\usart.o"
@@ -10,6 +11,7 @@
 "keil_8-11\stm32f4xx_hal_timebase_tim.o"
 "keil_8-11\stm32f4xx_hal_tim.o"
 "keil_8-11\stm32f4xx_hal_tim_ex.o"
+"keil_8-11\stm32f4xx_hal_can.o"
 "keil_8-11\stm32f4xx_hal_rcc.o"
 "keil_8-11\stm32f4xx_hal_rcc_ex.o"
 "keil_8-11\stm32f4xx_hal_flash.o"
@@ -32,6 +34,7 @@
 "keil_8-11\ext_irq_handler.o"
 "keil_8-11\tim_irq_handler.o"
 "keil_8-11\uart_irq_handler.o"
+"keil_8-11\can_irq_handler.o"
 --strict --scatter "keil_8-11\keil_8-11.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

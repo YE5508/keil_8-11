@@ -1,5 +1,5 @@
 #include "switch_sm.h"
-
+#define FLOW_INTERVAL_MS 200U
 
 uint8_t TIM2_start_flag = 0;
 
@@ -11,13 +11,6 @@ const state_func switch_SM[]=
     [BREATH_STATE] = breath_state
 };
 
-const uint16_t flow_state_table[]=
-{
-    LED3_PIN,
-    LED3_PIN,
-    LED1_PIN,
-    LED1_PIN,
-};
 
 static void flow_off(void)
 {
@@ -27,11 +20,8 @@ static void flow_off(void)
 
 void idle_state(void)
 {
-    buzzer_off();
-    for(uint8_t i = 1;i<5;i++)
-    {
-        led_off(i);
-    }
+    //buzzer_off();
+    flow_off();
 }
 
 void sw_state(void)
@@ -51,9 +41,18 @@ void sw_state(void)
 }
 void flow_state(void)
 {
-    buzzer_off();
-    static uint8_t flowstate = 0;
-    led_toggle(flow_state_table[(flowstate ++)%FLOW_STATE_COUNT]);
+    static const uint8_t led_table[]={1,3};
+    static uint8_t led_index =0;
+    static uint32_t last_time = 0;
+    if(HAL_GetTick()-last_time >FLOW_INTERVAL_MS )
+    {
+        last_time = HAL_GetTick();
+        led_off(1);
+        led_off(3);
+        led_on(led_table[led_index]);
+        led_index=(led_index+1)%2;
+    }
+
 }
 
 
@@ -101,18 +100,7 @@ void state_run(uint8_t state)
             flow_off();
             break;
         case FLOW_STATE:
-        if(!TIM2_start_flag)
-        {
-            TIM2_start();   
-            TIM2_start_flag=1;    
-        }
-
-            if(tim2out_flag)
-            {
-                flow_state();
-                tim2out_flag = 0;
-                TIM2_start_flag = 0;
-            }
+            switch_SM[FLOW_STATE]();
             break;
         case BREATH_STATE:
             switch_SM[BREATH_STATE]();

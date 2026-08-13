@@ -6,7 +6,7 @@
 #include "usart.h"
 #include "string.h"
 
-extern uint8_t beep_times;
+extern volatile uint8_t Beep_Trigger;
 extern uint8_t tx_flag;
 extern uint8_t tx_buffer[100];
 
@@ -15,4 +15,3 @@ void UART_Start_Receive(void);
 #define BUFFER_LEN ARRLEN(tx_buffer)
 
 #endif
-

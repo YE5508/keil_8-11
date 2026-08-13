@@ -1,6 +1,6 @@
-keil_8-11/stm32f4xx_hal_pwr.o: \
-  ..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.c \
-  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
+keil_8-11/can_irq_handler.o: ..\IRQ\Src\CAN_IRQ_Handler.c \
+  ..\IRQ\Inc\CAN_IRQ_Handler.h ..\IRQ\Inc\EXT_IRQ_Handler.h \
+  ..\Core\Inc\main.h ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h \
@@ -30,4 +30,9 @@ keil_8-11/stm32f4xx_hal_pwr.o: \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
-  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h
+  ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
+  ..\User\Inc\switch_sm.h ..\HDL\Inc\led.h ..\HDL\Inc\buzzer.h \
+  ..\User\Inc\timer.h E:\app\Keil\ARM\ARMCLANG\Bin\..\include\stdbool.h \
+  ..\IRQ\Inc\TIM_IRQ_Handler.h ..\Core\Inc\tim.h ..\Core\Inc\can.h \
+  ..\IRQ\Inc\UART_IRQ_Handler.h ..\Core\Inc\usart.h \
+  E:\app\Keil\ARM\ARMCLANG\Bin\..\include\string.h

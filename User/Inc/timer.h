@@ -15,9 +15,6 @@ extern "C" {
 
 /* 宏定义 */
 
-
-
-
 typedef struct timer
 {
      uint32_t start_time;

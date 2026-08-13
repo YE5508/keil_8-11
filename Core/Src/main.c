@@ -18,11 +18,12 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "can.h"
 #include "dma.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-#include "string.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "TIM_IRQ_Handler.h"
@@ -44,6 +45,7 @@ typedef struct Frame
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define CAN_RX_DEBUG_ENABLE 0
 
 
 /* USER CODE END PD */
@@ -56,11 +58,18 @@ typedef struct Frame
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t switch_state =0 ;
+volatile uint8_t switch_state =0 ;
 Frame frame={0,{0x00, 0x00, 0x80, 0x7F}};
 double t = 0;
 uint8_t volatile dma_state = 0;
 uint32_t last_time = 0;
+
+CAN_TxHeaderTypeDef txHeader_Buzzer;
+
+uint32_t txMailbox;
+uint8_t Buzzer_Data[8] = {0};
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -71,17 +80,67 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+#if CAN_RX_DEBUG_ENABLE
+typedef struct
+{
+  uint32_t tick;
+  HAL_CAN_StateTypeDef state;
+  uint32_t error_code;
+  uint32_t ier;
+  uint32_t rf0r;
+  uint32_t esr;
+  uint32_t msr;
+  uint32_t btr;
+  uint32_t fifo0_level;
+  uint32_t rx0_irq_enabled;
+  uint32_t rx0_irq_pending;
+} CAN_RxDebugTypeDef;
+
+static volatile CAN_RxDebugTypeDef can_rx_debug;
+
+static void CAN_RxDebugCheck(void)
+{
+  static uint32_t last_check_tick = 0;
+  uint32_t current_tick = HAL_GetTick();
+
+  if ((current_tick - last_check_tick) < 50U)
+  {
+    return;
+  }
+
+  last_check_tick = current_tick;
+  can_rx_debug.tick = current_tick;
+  can_rx_debug.state = HAL_CAN_GetState(&hcan1);
+  can_rx_debug.error_code = HAL_CAN_GetError(&hcan1);
+  can_rx_debug.ier = CAN1->IER;
+  can_rx_debug.rf0r = CAN1->RF0R;
+  can_rx_debug.esr = CAN1->ESR;
+  can_rx_debug.msr = CAN1->MSR;
+  can_rx_debug.btr = CAN1->BTR;
+  can_rx_debug.fifo0_level = HAL_CAN_GetRxFifoFillLevel(&hcan1, CAN_RX_FIFO0);
+  can_rx_debug.rx0_irq_enabled = NVIC_GetEnableIRQ(CAN1_RX0_IRQn);
+  can_rx_debug.rx0_irq_pending = NVIC_GetPendingIRQ(CAN1_RX0_IRQn);
+}
+#endif
 
 /* USER CODE END 0 */
 
 /**
   * @brief  The application entry point.
-z  * @retval int
+  * @retval int
   */
 int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+  /*蜂鸣器响完后发送的数据*/
+  txHeader_Buzzer.IDE = CAN_ID_EXT;
+  txHeader_Buzzer.ExtId = 0x02010101;       // 29位扩展ID
+  txHeader_Buzzer.RTR = CAN_RTR_DATA;
+  txHeader_Buzzer.DLC = 2;
+  txHeader_Buzzer.TransmitGlobalTime = DISABLE;
+  Buzzer_Data[0]='O';
+  Buzzer_Data[1]='K';
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -106,6 +165,7 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM3_Init();
   MX_USART1_UART_Init();
+  MX_CAN1_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_2);
@@ -119,21 +179,29 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    if(beep_times!=0)
+#if CAN_RX_DEBUG_ENABLE
+    CAN_RxDebugCheck();
+#endif
+
+		
+    if(Beep_Trigger!=0)
     {
-      Beep_Alarm(beep_times);
-      beep_times = 0;
+      Beep_Alarm(Beep_Trigger);
+      HAL_CAN_AddTxMessage(&hcan1,&txHeader_Buzzer,Buzzer_Data,&txMailbox);
+      Beep_Trigger = 0;
     }//蜂鸣器按上位机发出的满足条件的0x01的数目发声
-    if(HAL_GetTick()-last_time > 20)
+    if(switch_state==FLOW_STATE)
     {
-      last_time = HAL_GetTick();
-      frame.fdata[0]= sin(t);
-      t+=0.02;
-      if(dma_state==0)
-      {
-        dma_state = HAL_UART_Transmit_DMA(&huart1,(uint8_t*)&frame,sizeof(frame));
-      }
+      state_run(FLOW_STATE);
+
     }
+    else if (switch_state==IDLE_STATE)
+    {
+      state_run(IDLE_STATE);
+      /* code */
+    }
+		if(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1)!=0)
+          HAL_CAN_AddTxMessage(&hcan1,&txHeader_Buzzer,Buzzer_Data,&txMailbox);
 
     
 

@@ -2,7 +2,7 @@
 #include "main.h"
 
 uint8_t rx_buffer[100] = {0};
-uint8_t beep_times = 0;
+uint8_t volatile Beep_Trigger = 0;
 uint8_t tx_buffer[100] = {0};
 uint8_t tx_flag = 0;
 
@@ -24,7 +24,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
             {
                 if (rx_buffer[i] == 1)
                 {
-                    beep_times++;
+                    Beep_Trigger++;
                 }
             }
         }
@@ -45,7 +45,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
             {
                 if (rx_buffer[i] == 1)
                 {
-                    beep_times++;
+                    Beep_Trigger++;
                 }
             }
         }

@@ -69,6 +69,7 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN Private defines */
 extern uint8_t volatile dma_state;
+extern volatile uint8_t switch_state;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

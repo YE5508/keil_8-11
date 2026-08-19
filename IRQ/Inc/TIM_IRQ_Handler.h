@@ -5,6 +5,8 @@
 
 #include "stm32f4xx_hal.h"
 #include "tim.h"
+#include "UART_IRQ_Handler.h"
+#include "math.h"
 
 extern volatile uint8_t tim2out_flag;
 extern volatile uint16_t buzzer_time;

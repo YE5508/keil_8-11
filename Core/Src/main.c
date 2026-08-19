@@ -36,11 +36,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 #define CH_COUNT 1
-typedef struct Frame
-{
-    float fdata[CH_COUNT];
-    uint8_t tail[4];
-}Frame;
+
 
 /* USER CODE END PTD */
 
@@ -60,7 +56,7 @@ typedef struct Frame
 
 /* USER CODE BEGIN PV */
 volatile uint8_t switch_state =0 ;
-Frame frame={0,{0x00, 0x00, 0x80, 0x7F}};
+
 double t = 0;
 uint8_t volatile dma_state = 0;
 uint32_t last_time = 0;
@@ -167,8 +163,6 @@ int main(void)
   MX_USART1_UART_Init();
   MX_CAN1_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1);
-  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_2);
   UART_Start_Receive();
   /* USER CODE END 2 */
 
@@ -179,30 +173,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-#if CAN_RX_DEBUG_ENABLE
-    CAN_RxDebugCheck();
-#endif
-
-		
-//    if(Beep_Trigger!=0)
-//    {
-//      Beep_Alarm(Beep_Trigger);
-//      HAL_CAN_AddTxMessage(&hcan1,&txHeader_Buzzer,Buzzer_Data,&txMailbox);
-//      Beep_Trigger = 0;
-//    }//蜂鸣器按上位机发出的满足条件的0x01的数目发声
-//    if(switch_state==FLOW_STATE)
-//    {
-//      state_run(FLOW_STATE);
-
-//    }
-//    else if (switch_state==IDLE_STATE)
-//    {
-//      state_run(IDLE_STATE);
-//      /* code */
-//    }
-		HAL_Delay(100);
-//		if(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1)!=0)
-
+    if(Beep_Trigger!=0)
+    {
+      Beep_Alarm(Beep_Trigger);
+      HAL_CAN_AddTxMessage(&hcan1,&txHeader_Buzzer,Buzzer_Data,&txMailbox);
+      Beep_Trigger = 0;
+    }//蜂鸣器按上位机发出的满足条件的0x01的数目发声
 			txHeader_Buzzer.IDE = CAN_ID_EXT;
 			txHeader_Buzzer.ExtId = 0x02010101;       // 29位扩展ID
 			txHeader_Buzzer.RTR = CAN_RTR_DATA;
@@ -213,12 +189,6 @@ int main(void)
 
     
 
-
-    /*if(tx_flag == 1)
-    {
-      HAL_UART_Transmit(&huart1,tx_buffer,BUFFER_LEN,200);
-      tx_flag =0;
-    }*/
   }
   /* USER CODE END 3 */
 }
@@ -244,8 +214,8 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 13;
-  RCC_OscInitStruct.PLL.PLLN = 168;
+  RCC_OscInitStruct.PLL.PLLM = 25;
+  RCC_OscInitStruct.PLL.PLLN = 336;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)

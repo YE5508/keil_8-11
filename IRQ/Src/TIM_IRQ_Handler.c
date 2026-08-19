@@ -1,6 +1,7 @@
 #include "TIM_IRQ_Handler.h"
 #include "led.h"
 
+
 volatile uint8_t tim2out_flag = 1;
 volatile uint16_t buzzer_time = 0;
 
@@ -17,7 +18,8 @@ void TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     {
         HAL_TIM_Base_Stop_IT(htim);
         // 计时结束后的处理
-        buzzer_off();
-
+        static float t=0;
+        t+=0.01;
+        UART_Send_Float(sin(t));
     }
 }

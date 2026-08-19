@@ -6,12 +6,27 @@ uint8_t volatile Beep_Trigger = 0;
 uint8_t tx_buffer[100] = {0};
 uint8_t tx_flag = 0;
 
+
+
 void UART_Start_Receive(void)
 {
     HAL_UARTEx_ReceiveToIdle_IT(&huart1,rx_buffer,sizeof(rx_buffer));
     //HAL_UART_Receive_IT(&huart1, rx_buffer, 5); // UART接收-定长中断
     //HAL_UARTEx_ReceiveToIdle_DMA(&huart1,rx_buffer,sizeof(rx_buffer));
     //HAL_UART_Receive_DMA(&huart1, rx_buffer, 5);
+}
+
+void UART_Send_Float(float data)
+{
+    Frame frame={0,{0x00, 0x00, 0x80, 0x7F}};
+    frame.fdata[0]=data;
+    uint8_t tx[8]={0};
+    memcpy(tx,&frame,8);
+    if(HAL_UART_Transmit_DMA(&huart1,&tx, 8)!=HAL_OK)
+    {
+      return;        
+    }
+
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
